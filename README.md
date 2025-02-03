@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# FIRSTBA$E
 
-## Getting Started
+A decentralized message board for Base chain and Ethereum mainnet. Send messages on-chain and view them in a clean interface. Mr. First Base is an anonymous author that posts messages on mainnet. You can send messages to him on Base due to the cost savings. All messages to and from him are stored onchain and displayed here.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Send messages on Base
+- View all messages from an addressin chronological order
+- Built-in $FIRSTBASE token swap using Coinbase's OnchainKit
+- Dark mode support
+- Mobile responsive
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technical Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Frontend
+- Next.js 13+ (App Router)
+- TypeScript
+- TailwindCSS
+- RainbowKit for wallet connection
+- Wagmi for Ethereum interactions
+- Coinbase's OnchainKit for swaps
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Backend
+- FastAPI (Python)
+- SQLAlchemy
+- MySQL database
+- Etherscan/Basescan APIs for transaction fetching
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+The application requires several environment variables to be set:
+- API URLs and Keys (Etherscan, Basescan)
+- Web3 Configuration (WalletConnect, Coinbase)
+- Database Connection Details
+- Contract/Wallet Addresses
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+See `.env.example` for all required variables.
