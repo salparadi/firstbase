@@ -30,7 +30,7 @@ ENDPOINTS = {
 DATABASE_URL = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
 engine = sqlalchemy.create_engine(DATABASE_URL)
 
-# Keep your existing UTF-8 replacements
+# UTF-8 replacements
 utf8_replacements = {
     " \u0018": "'",
     " \u0019": "'",
@@ -77,7 +77,7 @@ def get_transactions(endpoint_info: Dict) -> List[Dict]:
     
     return transactions
 
-def decode_input(input_hex):
+def decode_input(input_hex: str) -> str:
     decoded = bytes.fromhex(input_hex[2:]).decode("utf-8", errors="ignore")
     for utf8_code, replacement in utf8_replacements.items():
         decoded = decoded.replace(utf8_code, replacement)
@@ -109,14 +109,12 @@ def import_data():
         for message in all_transactions:
             if message["hash"] not in existing_hashes and message["input"] != "":
                 try:
-                    sql = sqlalchemy.sql.text(
-                        """
+                    sql = sqlalchemy.sql.text("""
                         INSERT INTO messages 
                         (blockNumber, timeStamp, hash, `from`, `to`, `nonce`, `input`, `status`, `chain`) 
                         VALUES 
                         (:blockNumber, :timeStamp, :hash, :from, :to, :nonce, :input, :status, :chain)
-                        """
-                    )
+                    """)
                     val = {
                         "blockNumber": message["blockNumber"],
                         "timeStamp": message["timeStamp"],

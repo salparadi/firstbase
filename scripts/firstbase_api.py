@@ -6,7 +6,7 @@ import uvicorn
 from dotenv import load_dotenv
 import os
 
-# Load environment variables from .env file
+# Load environment variables
 load_dotenv()
 
 # Build database URL from environment variables
@@ -17,8 +17,12 @@ FASTAPI_HOST = "0.0.0.0"
 FASTAPI_PORT = 7777
 engine = sqlalchemy.create_engine(DATABASE_URL)
 
-# Create a FastAPI instance
-app = FastAPI()
+# Create FastAPI instance
+app = FastAPI(
+    title="FirstBase API",
+    description="API for FirstBase message system",
+    version="1.0.0"
+)
 
 # CORS setup
 origins = [
@@ -26,6 +30,7 @@ origins = [
     "http://localhost:3000",
     "http://localhost",
 ]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -34,19 +39,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Get all rounds
 @app.get("/api/messages")
-def get_messages(
+async def get_messages(
     response: Response,
     page: int = 1,
     page_size: int = 20
 ):
+    """Retrieve paginated messages from the database."""
     try:
-        # Calculate offset
+        # Calculate offset for pagination
         offset = (page - 1) * page_size
         
         with engine.connect() as connection:
-            # Get total count
+            # Get total count of messages
             count_query = sqlalchemy.text(
                 "SELECT COUNT(*) as total FROM messages WHERE `status` = 1"
             )
@@ -67,7 +72,7 @@ def get_messages(
                 {"limit": page_size, "offset": offset}
             ).fetchall()
             
-            result = {
+            return {
                 "items": [message._asdict() for message in messages],
                 "pagination": {
                     "total": total_count,
@@ -77,12 +82,13 @@ def get_messages(
                 }
             }
             
-            return result
-            
     except SQLAlchemyError as e:
         response.status_code = 500
         return {"error": "Database error occurred"}
 
-# Main entry point
 if __name__ == "__main__":
-    uvicorn.run(app, host=FASTAPI_HOST, port=FASTAPI_PORT)
+    uvicorn.run(
+        app,
+        host=FASTAPI_HOST,
+        port=FASTAPI_PORT
+    )

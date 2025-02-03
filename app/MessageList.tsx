@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { FC, useState } from 'react';
 import SendMessage from './SendMessage';
 import Pagination from './Pagination';
 
@@ -10,16 +10,16 @@ const truncateHash = (str: string) => {
 };
 
 interface Message {
-    id: number,
-    blockNumber: number,
-    timeStamp: number,
-    hash: string,
-    from: string,
-    to: string,
-    nonce: number,
-    input: string,
-    status: boolean,
-    chain: string,
+    id: number;
+    blockNumber: number;
+    timeStamp: number;
+    hash: string;
+    from: string;
+    to: string;
+    nonce: number;
+    input: string;
+    status: boolean;
+    chain: string;
 }
 
 // Add pagination interface
@@ -37,10 +37,10 @@ interface MessageListProps {
     onPageChange: (page: number) => void;
 }
 
-const MessageList: React.FC<MessageListProps> = ({ messages, pagination, onPageChange }) => {
+const MessageList: FC<MessageListProps> = ({ messages, pagination, onPageChange }) => {
     const [showDevOnly, setShowDevOnly] = useState(false);
     const [showForm, setShowForm] = useState(false);
-    const devAddress = process.env.NEXT_PUBLIC_DEV_ADDRESS || "";
+    const devAddress = process.env.NEXT_PUBLIC_DEV_ADDRESS || '';
     const toggleMessages = () => setShowDevOnly(!showDevOnly);
     const toggleForm = () => setShowForm(!showForm);
 
@@ -67,11 +67,17 @@ const MessageList: React.FC<MessageListProps> = ({ messages, pagination, onPageC
             {showForm && <SendMessage />}
             
             <nav className="flex gap-[10px] flex-start">
-                <button onClick={toggleForm} className="font-mono inline-block px-4 py-[10px] text-gray-400 rounded-[12px] font-bold text-[16px] leading-5 mb-[40px] border-[2px] border-gray-300 dark:text-white">
+                <button 
+                    onClick={toggleForm} 
+                    className="font-mono inline-block px-4 py-[10px] text-gray-400 rounded-[12px] font-bold text-[16px] leading-5 mb-[40px] border-[2px] border-gray-300 dark:text-white"
+                >
                     {showForm ? 'Hide Message' : 'Send Message'}
                 </button>
 
-                <button onClick={toggleMessages} className="font-mono inline-block px-4 py-[10px] text-gray-400 rounded-[12px] font-bold text-[16px] leading-5 mb-[40px] border-[2px] border-gray-300 dark:text-white">
+                <button 
+                    onClick={toggleMessages} 
+                    className="font-mono inline-block px-4 py-[10px] text-gray-400 rounded-[12px] font-bold text-[16px] leading-5 mb-[40px] border-[2px] border-gray-300 dark:text-white"
+                >
                     {showDevOnly ? 'Show All Messages' : 'Show MFB Only'}
                 </button>
             </nav>
@@ -90,8 +96,8 @@ const MessageList: React.FC<MessageListProps> = ({ messages, pagination, onPageC
                 }
 
                 const listItemClass = isDev 
-                    ? "block mb-[50px] w-[100%]" 
-                    : "mb-[50px] w-[100%] opacity-50 bg-white p-[20px] border-l-[3px] border-black dark:bg-black dark:border-white dark:opacity-70";
+                    ? 'block mb-[50px] w-[100%]' 
+                    : 'mb-[50px] w-[100%] opacity-50 bg-white p-[20px] border-l-[3px] border-black dark:bg-black dark:border-white dark:opacity-70';
 
                 return (
                     <li key={message.id} className={listItemClass}>
@@ -100,22 +106,45 @@ const MessageList: React.FC<MessageListProps> = ({ messages, pagination, onPageC
                             <dd className="inline-block">{message.nonce}</dd>
 
                             <dt className="inline-block font-bold">Block:</dt>
-                            <dd className="inline-block"><a className="hover:text-gray-700 dark:hover:text-gray-400 transition-all" href={blockUrl} target="_blank" rel="noopener noreferrer">{message.blockNumber}</a></dd>
+                            <dd className="inline-block">
+                                <a className="hover:text-gray-700 dark:hover:text-gray-400 transition-all" href={blockUrl} target="_blank" rel="noopener noreferrer">
+                                    {message.blockNumber}
+                                </a>
+                            </dd>
 
                             <dt className="inline-block font-bold">Time :</dt>
-                            <dd className="inline-block">{gmtTime} <span className="hidden md:inline-block text-gray-700 dark:text-gray-400">({message.timeStamp})</span></dd>
+                            <dd className="inline-block">
+                                {gmtTime} <span className="hidden md:inline-block text-gray-700 dark:text-gray-400">({message.timeStamp})</span>
+                            </dd>
 
                             <dt className="inline-block font-bold">From :</dt>
-                            <dd className="inline-block"><a className="hover:text-gray-700 dark:hover:text-gray-400 transition-all" href={fromUrl} target="_blank" rel="noopener noreferrer"><span className="hidden md:inline-block">{message.from}</span> <span className="md:hidden">{truncateHash(message.from)}</span></a></dd>
+                            <dd className="inline-block">
+                                <a className="hover:text-gray-700 dark:hover:text-gray-400 transition-all" href={fromUrl} target="_blank" rel="noopener noreferrer">
+                                    <span className="hidden md:inline-block">{message.from}</span>
+                                    <span className="md:hidden">{truncateHash(message.from)}</span>
+                                </a>
+                            </dd>
 
                             <dt className="inline-block font-bold">To &nbsp;&nbsp;:</dt>
-                            <dd className="inline-block"><a className="hover:text-gray-700 dark:hover:text-gray-400 transition-all" href={toUrl} target="_blank" rel="noopener noreferrer"><span className="hidden md:inline-block">{message.to}</span> <span className="md:hidden">{truncateHash(message.to)}</span></a></dd>
+                            <dd className="inline-block">
+                                <a className="hover:text-gray-700 dark:hover:text-gray-400 transition-all" href={toUrl} target="_blank" rel="noopener noreferrer">
+                                    <span className="hidden md:inline-block">{message.to}</span>
+                                    <span className="md:hidden">{truncateHash(message.to)}</span>
+                                </a>
+                            </dd>
 
                             <dt className="inline-block font-bold">Hash :</dt>
-                            <dd className="inline-block"><a className="hover:text-gray-700 dark:hover:text-gray-400 transition-all" href={txUrl} target="_blank" rel="noopener noreferrer"><span className="hidden md:inline-block">{message.hash}</span> <span className="md:hidden">{truncateHash(message.hash)}</span></a></dd>
+                            <dd className="inline-block">
+                                <a className="hover:text-gray-700 dark:hover:text-gray-400 transition-all" href={txUrl} target="_blank" rel="noopener noreferrer">
+                                    <span className="hidden md:inline-block">{message.hash}</span>
+                                    <span className="md:hidden">{truncateHash(message.hash)}</span>
+                                </a>
+                            </dd>
                         </dl>
 
-                        <p className="text-[14px] md:text-[16px] w-[100%] whitespace-pre-wrap break-words">{message.input}</p>
+                        <p className="text-[14px] md:text-[16px] w-[100%] whitespace-pre-wrap break-words">
+                            {message.input}
+                        </p>
                         <span className="block text-2xl font-light mt-[50px]">=========</span>
                     </li>
                 );
@@ -130,6 +159,6 @@ const MessageList: React.FC<MessageListProps> = ({ messages, pagination, onPageC
             </div>
         </div>
     );
-}
+};
 
 export default MessageList;

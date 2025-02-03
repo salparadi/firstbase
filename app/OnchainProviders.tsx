@@ -1,21 +1,17 @@
 'use client';
+
 import { ReactNode } from 'react';
-import { OnchainKitProvider } from '@coinbase/onchainkit';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { base } from 'viem/chains';
 import { WagmiProvider } from 'wagmi';
-//import { wagmiConfig } from '../wagmi';
-
-import '@rainbow-me/rainbowkit/styles.css';
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { OnchainKitProvider } from '@coinbase/onchainkit';
 import {
     getDefaultConfig,
     RainbowKitProvider,
     lightTheme,
     midnightTheme,
-    AvatarComponent,
+    type AvatarComponent
 } from '@rainbow-me/rainbowkit';
-
 import {
     coinbaseWallet,
     metaMaskWallet,
@@ -24,26 +20,34 @@ import {
     rainbowWallet,
     walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
+import '@rainbow-me/rainbowkit/styles.css';
+import soon from '../public/favicon.png';
 
-type Props = { children: ReactNode };
+interface ProvidersProps {
+    children: ReactNode;
+}
 
-const config = getDefaultConfig({
+const walletConfig = getDefaultConfig({
     appName: 'FIRSTBA$E',
     projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID!,
     chains: [base],
     wallets: [
         {
             groupName: 'Recommended',
-            wallets: [metaMaskWallet, coinbaseWallet, rabbyWallet, walletConnectWallet, rainbowWallet, phantomWallet],
+            wallets: [
+                metaMaskWallet,
+                coinbaseWallet,
+                rabbyWallet,
+                walletConnectWallet,
+                rainbowWallet,
+                phantomWallet
+            ],
         },
     ],
-    ssr: true, // If your dApp uses server side rendering (SSR)
+    ssr: true,
 });
 
 const queryClient = new QueryClient();
-const API_KEY = process.env.NEXT_PUBLIC_COINBASE_API_KEY;
-
-import soon from '../public/favicon.png';
 
 const CustomAvatar: AvatarComponent = ({ ensImage, size }) => {
     return ensImage ? (
@@ -65,16 +69,18 @@ const CustomAvatar: AvatarComponent = ({ ensImage, size }) => {
     );
 };
 
-function OnchainProviders({ children }: Props) {
+const OnchainProviders = ({ children }: ProvidersProps) => {
     return (
-        <WagmiProvider config={config}>
+        <WagmiProvider config={walletConfig}>
             <QueryClientProvider client={queryClient}>
                 <OnchainKitProvider
-                    apiKey={API_KEY}
+                    apiKey={process.env.NEXT_PUBLIC_COINBASE_API_KEY}
                     chain={base}
                 >
-                    <RainbowKitProvider modalSize="wide" avatar={CustomAvatar} theme={
-                        {
+                    <RainbowKitProvider 
+                        modalSize="wide" 
+                        avatar={CustomAvatar} 
+                        theme={{
                             lightMode: lightTheme({
                                 accentColor: '#0F172A',
                                 accentColorForeground: 'white',
@@ -89,13 +95,14 @@ function OnchainProviders({ children }: Props) {
                                 fontStack: 'system',
                                 overlayBlur: 'small',
                             }),
-                        }}>
+                        }}
+                    >
                         {children}
                     </RainbowKitProvider>
                 </OnchainKitProvider>
             </QueryClientProvider>
         </WagmiProvider>
     );
-}
+};
 
 export default OnchainProviders;
