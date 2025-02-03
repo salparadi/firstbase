@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --text-inverse: theme(colors.gray.50);
+        --text-foreground: theme(colors.gray.950);
+        --text-foreground-muted: theme(colors.gray.600);
+        --text-error: theme(colors.rose.600);
+        --text-primary: theme(colors.indigo.600);
+        --text-success: theme(colors.lime.600);
+        --text-warning: theme(colors.orange.600);
+        --text-disabled: theme(colors.gray.400);
+
+        --bg-default: theme(colors.gray.50);
+        --bg-default-hover: theme(colors.gray.200);
+        --bg-default-active: theme(colors.gray.300);
+        --bg-alternate: theme(colors.gray.100);
+        --bg-alternate-hover: theme(colors.gray.200);
+        --bg-alternate-active: theme(colors.gray.300);
+        --bg-inverse: theme(colors.gray.100);
+        --bg-inverse-hover: theme(colors.gray.200);
+        --bg-inverse-active: theme(colors.gray.300);
+        --bg-primary: theme(colors.slate.600);
+        --bg-primary-hover: theme(colors.slate.700);
+        --bg-primary-active: theme(colors.slate.800);
+        --bg-secondary: theme(colors.slate.200);
+        --bg-secondary-hover: theme(colors.slate.300);
+        --bg-secondary-active: theme(colors.slate.400);
+        --bg-error: theme(colors.rose.600);
+        --bg-warning: theme(colors.orange.600);
+        --bg-success: theme(colors.lime.300);
+    }
+}
+
+:root {
+    --foreground-rgb: 0, 0, 0;
+    --background-rgb: 246, 242, 243;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --foreground-rgb: 240, 240, 240;
+        --background-rgb: 57, 53, 55;
+    }
+}
+
+body {
+    color: rgb(var(--foreground-rgb));
+    background: rgb(var(--background-rgb));
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
