@@ -25,7 +25,6 @@ export default function RootLayout({
         <html lang="en">
             <head>
                 <link rel="icon" href="/favicon.png" />
-                <Script src="https://kit.fontawesome.com/46fb356c31.js"></Script>
             </head>
             <body className="font-mono">
                 <OnchainProviders>

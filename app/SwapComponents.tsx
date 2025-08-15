@@ -16,7 +16,7 @@ const tokens = {
         decimals: 18,
         name: 'Ether',
         symbol: 'ETH',
-        image: 'https://firstbase.bot/eth.png'
+        image: 'https://mrfirstbase.com/eth.png'
     },
     WETH: {
         address: '0x4200000000000000000000000000000000000006',
@@ -24,7 +24,7 @@ const tokens = {
         decimals: 18,
         name: 'Wrapped Ether',
         symbol: 'WETH',
-        image: 'https://firstbase.bot/weth.png'
+        image: 'https://mrfirstbase.com/weth.png'
     },
     USDC: {
         address: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
@@ -32,7 +32,7 @@ const tokens = {
         decimals: 6,
         name: 'USDC',
         symbol: 'USDC',
-        image: 'https://firstbase.bot/usdc.png'
+        image: 'https://mrfirstbase.com/usdc.png'
     },
     USDT: {
         address: '0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2',
@@ -40,7 +40,7 @@ const tokens = {
         decimals: 6,
         name: 'USDT',
         symbol: 'USDT',
-        image: 'https://firstbase.bot/usdt.png'
+        image: 'https://mrfirstbase.com/usdt.png'
     },
     FIRSTBASE: {
         address: '0x802161b1BDe5E45eC02D42d3c1DC9f6b8319b666',
@@ -48,7 +48,7 @@ const tokens = {
         decimals: 18,
         name: 'First Time on Base',
         symbol: 'FIRSTBASE',
-        image: 'https://firstbase.bot/favicon.png'
+        image: 'https://mrfirstbase.com/favicon.png'
     }
 } as const;
 

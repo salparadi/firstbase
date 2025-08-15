@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useState, Suspense, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import Modal from 'react-modal';
@@ -76,18 +76,16 @@ const MainContent = () => {
         Modal.setAppElement('body');
     }, []);
 
+    // Initial data fetch - only run once on mount
     useEffect(() => {
-        const currentParams = new URLSearchParams(window.location.search);
-        currentParams.set('page', pagination.page.toString());
-        router.push(`?${currentParams.toString()}`, { scroll: false });
-        
-        fetchMessages(pagination.page);
-    }, [pagination.page, router]);
+        const initialPage = Number(searchParams.get('page')) || 1;
+        fetchMessages(initialPage);
+    }, []); // Empty dependency array - only run on mount
 
-    const fetchMessages = async (page: number) => {
+    const fetchMessages = useCallback(async (page: number) => {
         try {
             setIsLoading(true);
-            const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/messages?page=${page}&page_size=${pagination.page_size}`;
+            const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/messages?page=${page}&page_size=10`;
             const response = await fetch(url);
             
             if (!response.ok) {
@@ -100,20 +98,26 @@ const MainContent = () => {
                 setMessages(data.items);
                 setPagination(data.pagination);
             } else {
-                console.error('Invalid API response format:', data);
+                console.warn('Invalid API response format:', data);
                 setMessages([]);
             }
         } catch (error) {
-            console.error('Error fetching Messages:', error);
+            console.warn('Error fetching Messages:', error);
             setMessages([]);
         } finally {
             setIsLoading(false);
         }
-    };
+    }, []); // No dependencies - this prevents the infinite loop
 
-    const handlePageChange = (newPage: number) => {
-        setPagination(prev => ({ ...prev, page: newPage }));
-    };
+    const handlePageChange = useCallback(async (newPage: number) => {
+        // Update URL without triggering a re-render
+        const currentParams = new URLSearchParams(window.location.search);
+        currentParams.set('page', newPage.toString());
+        router.push(`?${currentParams.toString()}`, { scroll: false });
+        
+        // Fetch new data
+        await fetchMessages(newPage);
+    }, [fetchMessages, router]);
 
     if (isLoading) return <LoadingState />;
 
@@ -132,13 +136,13 @@ const MainContent = () => {
                         href="https://x.com/FirstTimeOnBase" 
                         className="font-mono inline-block ml-3 px-4 py-[8px] bg-black text-white rounded-[12px] font-bold text-[16px]"
                     >
-                        <i className="fa-brands fa-x-twitter"></i>
+                        X
                     </a>
                     <a 
                         href="https://t.me/firstbaseaccess" 
                         className="font-mono inline-block ml-3 px-4 py-[8px] bg-black text-white rounded-[12px] font-bold text-[16px]"
                     >
-                        <i className="fa-brands fa-telegram"></i>
+                        TELEGRAM
                     </a>
                     <button
                         onClick={() => setModalIsOpen(true)}
@@ -155,6 +159,7 @@ const MainContent = () => {
                         messages={messages}
                         pagination={pagination}
                         onPageChange={handlePageChange}
+                        isLoading={isLoading}
                     />
                 </ul>
             </section>

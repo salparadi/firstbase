@@ -35,15 +35,28 @@ interface MessageListProps {
     messages: Message[];
     pagination: PaginationData;
     onPageChange: (page: number) => void;
+    isLoading: boolean;
 }
 
-const MessageList: FC<MessageListProps> = ({ messages, pagination, onPageChange }) => {
+const MessageList: FC<MessageListProps> = ({ messages, pagination, onPageChange, isLoading }) => {
     const [showDevOnly, setShowDevOnly] = useState(false);
     const [showForm, setShowForm] = useState(false);
     const devAddress = process.env.NEXT_PUBLIC_DEV_ADDRESS || '';
     const toggleMessages = () => setShowDevOnly(!showDevOnly);
     const toggleForm = () => setShowForm(!showForm);
 
+    // Show loading state while data is being fetched
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[200px] w-full">
+                <span className="text-2xl font-light opacity-75">==========</span>
+                <h2 className="text-2xl font-bold my-2 animate-pulse">Loading...</h2>
+                <span className="text-2xl font-light opacity-75">==========</span>
+            </div>
+        );
+    }
+
+    // Only show "no messages found" if we're not loading and there are actually no messages
     if (!messages || messages.length === 0) {
         return <div>No messages found</div>;
     }
